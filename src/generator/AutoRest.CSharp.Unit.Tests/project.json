@@ -9,8 +9,8 @@
   },
 
   "buildOptions": {
-    "delaySign": true,
-    "publicSign": false,
+    "delaySign": false,
+    "publicSign": true,
     "keyFile": "../../../Tools/MSSharedLibKey.snk",
 
     "copyToOutput": {
