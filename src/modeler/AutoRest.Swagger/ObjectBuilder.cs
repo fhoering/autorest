@@ -10,11 +10,12 @@ using AutoRest.Core;
 using AutoRest.Core.ClientModel;
 using AutoRest.Core.Utilities;
 using AutoRest.Swagger.Model;
+using Newtonsoft.Json.Linq;
 
 namespace AutoRest.Swagger
 {
     /// <summary>
-    /// The builder for building a generic swagger object into parameters, 
+    /// The builder for building a generic swagger object into parameters,
     /// service types or Json serialization types.
     /// </summary>
     public class ObjectBuilder
@@ -64,13 +65,25 @@ namespace AutoRest.Swagger
                         {
                             enumType.ModelAsString = bool.Parse(enumObject["modelAsString"].ToString());
                         }
+
+                        if (enumObject["values"] != null)
+                        {
+                            var values = enumObject["values"].ToObject<List<int>>();
+                            if (values.Count == enumType.Values.Count)
+                            {
+                                for (int i = 0; i < values.Count; i++)
+                                {
+                                    enumType.Values[i].SerializedName = values[i].ToString();
+                                }
+                            }
+                        }
                     }
                     enumType.SerializedName = enumType.Name;
                     if (string.IsNullOrEmpty(enumType.Name))
                     {
                         throw new InvalidOperationException(
-                            string.Format(CultureInfo.InvariantCulture, 
-                                "{0} extension needs to specify an enum name.", 
+                            string.Format(CultureInfo.InvariantCulture,
+                                "{0} extension needs to specify an enum name.",
                                 CodeGenerator.EnumObject));
                     }
                     var existingEnum =
