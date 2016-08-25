@@ -261,7 +261,7 @@ namespace AutoRest.NodeJS
                 builder.AppendLine("if ({0} && !Buffer.isBuffer({0})) {{", valueReference, lowercaseTypeName);
                 return ConstructValidationCheck(builder, typeErrorMessage, valueReference, primary.Name).ToString();
             }
-            else if (primary.Type == KnownPrimaryType.DateTime || primary.Type == KnownPrimaryType.Date || 
+            else if (primary.Type == KnownPrimaryType.DateTime || primary.Type == KnownPrimaryType.Date ||
                 primary.Type == KnownPrimaryType.DateTimeRfc1123 || primary.Type == KnownPrimaryType.UnixTime)
             {
                 if (isRequired)
@@ -302,7 +302,7 @@ namespace AutoRest.NodeJS
         /// </summary>
         /// <param name="primary">primary type to query</param>
         /// <returns>The TypeScript type correspoinding to this model primary type</returns>
-        private static string PrimaryTSType(this PrimaryType primary) 
+        private static string PrimaryTSType(this PrimaryType primary)
         {
             if (primary == null)
             {
@@ -311,19 +311,19 @@ namespace AutoRest.NodeJS
 
             if (primary.Type == KnownPrimaryType.Boolean)
                 return "boolean";
-            else if (primary.Type == KnownPrimaryType.Double || primary.Type == KnownPrimaryType.Decimal || 
+            else if (primary.Type == KnownPrimaryType.Double || primary.Type == KnownPrimaryType.Decimal ||
                 primary.Type == KnownPrimaryType.Int || primary.Type == KnownPrimaryType.Long)
                 return "number";
             else if (primary.Type == KnownPrimaryType.String || primary.Type == KnownPrimaryType.Uuid)
                 return "string";
-            else if (primary.Type == KnownPrimaryType.Date || primary.Type == KnownPrimaryType.DateTime || 
+            else if (primary.Type == KnownPrimaryType.Date || primary.Type == KnownPrimaryType.DateTime ||
                 primary.Type == KnownPrimaryType.DateTimeRfc1123 || primary.Type == KnownPrimaryType.UnixTime)
                 return "Date";
             else if (primary.Type == KnownPrimaryType.Object)
                 return "any";   // TODO: test this
-            else if (primary.Type == KnownPrimaryType.ByteArray || primary.Type == KnownPrimaryType.Base64Url)  
-                return "Buffer";  
-            else if (primary.Type == KnownPrimaryType.Stream)  
+            else if (primary.Type == KnownPrimaryType.ByteArray || primary.Type == KnownPrimaryType.Base64Url)
+                return "Buffer";
+            else if (primary.Type == KnownPrimaryType.Stream)
                 return "stream.Readable";
             else if (primary.Type == KnownPrimaryType.TimeSpan)
                 return "moment.Duration"; //TODO: test this, add include for it
@@ -366,7 +366,7 @@ namespace AutoRest.NodeJS
             {
                 builder.Outdent().AppendLine("}");
             }
-            
+
             return builder.ToString();
         }
 
@@ -520,7 +520,7 @@ namespace AutoRest.NodeJS
 
             return null;
         }
-		
+
         /// <summary>
         /// Return the TypeScript type (as a string) for specified type.
         /// </summary>
@@ -541,7 +541,7 @@ namespace AutoRest.NodeJS
             }
             else if (enumType != null)
             {
-                tsType = "string";
+                tsType = enumType.Name;
             }
             else if (composite != null)
             {
@@ -570,7 +570,7 @@ namespace AutoRest.NodeJS
             return tsType;
         }
 
-        public static IndentedStringBuilder AppendConstraintValidations(this IType type, string valueReference, Dictionary<Constraint, string> constraints, 
+        public static IndentedStringBuilder AppendConstraintValidations(this IType type, string valueReference, Dictionary<Constraint, string> constraints,
             IndentedStringBuilder builder)
         {
             if (valueReference == null)
@@ -750,7 +750,7 @@ namespace AutoRest.NodeJS
                 }
                 builder.Outdent().AppendLine("},");
             }
-            // Add type information 
+            // Add type information
             if (primary != null)
             {
                 if (primary.Type == KnownPrimaryType.Boolean)
@@ -903,8 +903,8 @@ namespace AutoRest.NodeJS
                                 {
                                     builder.AppendLine("{0}: {{{1}}}", prop.Name, prop.Type.ConstructMapper(serializedPropertyName, prop, false, false));
                                 }
-                                    
-                            }   
+
+                            }
                         }
                         else
                         {
