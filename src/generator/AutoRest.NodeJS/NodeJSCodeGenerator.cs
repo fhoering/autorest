@@ -84,7 +84,7 @@ namespace AutoRest.NodeJS
                         Documentation = "Subscription credentials which uniquely identify client subscription."
                     });
                 }
-                
+
             }
         }
 
@@ -96,76 +96,76 @@ namespace AutoRest.NodeJS
         public override async Task Generate(ServiceClient serviceClient)
         {
             var serviceClientTemplateModel = new ServiceClientTemplateModel(serviceClient);
-            // Service client
-            var serviceClientTemplate = new ServiceClientTemplate
+            //// Service client
+            //var serviceClientTemplate = new ServiceClientTemplate
+            //{
+            //    Model = serviceClientTemplateModel,
+            //};
+            //await Write(serviceClientTemplate, serviceClient.Name.ToCamelCase() + ".js");
+
+            //if (!DisableTypeScriptGeneration)
+            //{
+            //var serviceClientTemplateTS = new ServiceClientTemplateTS
+            //{
+            //    Model = serviceClientTemplateModel,
+            //};
+            //await Write(serviceClientTemplateTS, serviceClient.Name.ToCamelCase() + ".d.ts");
+            //}
+
+            ////Models
+            //if (serviceClient.ModelTypes.Any())
+            //{
+            //    var modelIndexTemplate = new ModelIndexTemplate
+            //    {
+            //        Model = serviceClientTemplateModel
+            //    };
+            //    await Write(modelIndexTemplate, Path.Combine("models", "index.js"));
+            //    if (!DisableTypeScriptGeneration)
+            //    {
+            var modelIndexTemplateTS = new ModelIndexTemplateTS
             {
-                Model = serviceClientTemplateModel,
+                Model = serviceClientTemplateModel
             };
-            await Write(serviceClientTemplate, serviceClient.Name.ToCamelCase() + ".js");
+            await Write(modelIndexTemplateTS, Path.Combine("models", "index.d.ts"));
+            //    }
 
-            if (!DisableTypeScriptGeneration)
+            //    foreach (var modelType in serviceClientTemplateModel.ModelTemplateModels)
+            //    {
+            //        var modelTemplate = new ModelTemplate
+            //        {
+            //            Model = modelType
+            //        };
+            //        await Write(modelTemplate, Path.Combine("models", modelType.Name.ToCamelCase() + ".js"));
+            //    }
+            //}
+
+            ////MethodGroups
+            //if (serviceClientTemplateModel.MethodGroupModels.Any())
+            //{
+            //    var methodGroupIndexTemplate = new MethodGroupIndexTemplate
+            //    {
+            //        Model = serviceClientTemplateModel
+            //    };
+            //    await Write(methodGroupIndexTemplate, Path.Combine("operations", "index.js"));
+
+            //    if (!DisableTypeScriptGeneration)
+            //    {
+            var methodGroupIndexTemplateTS = new MethodGroupIndexTemplateTS
             {
-                var serviceClientTemplateTS = new ServiceClientTemplateTS
-                {
-                    Model = serviceClientTemplateModel,
-                };
-                await Write(serviceClientTemplateTS, serviceClient.Name.ToCamelCase() + ".d.ts");
-            }
+                Model = serviceClientTemplateModel
+            };
+            await Write(methodGroupIndexTemplateTS, Path.Combine("operations", "index.d.ts"));
+            //    }
 
-            //Models
-            if (serviceClient.ModelTypes.Any())
-            {
-                var modelIndexTemplate = new ModelIndexTemplate
-                {
-                    Model = serviceClientTemplateModel
-                };
-                await Write(modelIndexTemplate, Path.Combine("models", "index.js"));
-                if (!DisableTypeScriptGeneration)
-                {
-                    var modelIndexTemplateTS = new ModelIndexTemplateTS
-                    {
-                        Model = serviceClientTemplateModel
-                    };
-                    await Write(modelIndexTemplateTS, Path.Combine("models", "index.d.ts"));
-                }
-
-                foreach (var modelType in serviceClientTemplateModel.ModelTemplateModels)
-                {
-                    var modelTemplate = new ModelTemplate
-                    {
-                        Model = modelType
-                    };
-                    await Write(modelTemplate, Path.Combine("models", modelType.Name.ToCamelCase() + ".js"));
-                }
-            }
-
-            //MethodGroups
-            if (serviceClientTemplateModel.MethodGroupModels.Any())
-            {
-                var methodGroupIndexTemplate = new MethodGroupIndexTemplate
-                {
-                    Model = serviceClientTemplateModel
-                };
-                await Write(methodGroupIndexTemplate, Path.Combine("operations", "index.js"));
-
-                if (!DisableTypeScriptGeneration)
-                {
-                    var methodGroupIndexTemplateTS = new MethodGroupIndexTemplateTS
-                    {
-                        Model = serviceClientTemplateModel
-                    };
-                    await Write(methodGroupIndexTemplateTS, Path.Combine("operations", "index.d.ts"));
-                }
-
-                foreach (var methodGroupModel in serviceClientTemplateModel.MethodGroupModels)
-                {
-                    var methodGroupTemplate = new MethodGroupTemplate
-                    {
-                        Model = methodGroupModel
-                    };
-                    await Write(methodGroupTemplate, Path.Combine("operations", methodGroupModel.MethodGroupType.ToCamelCase() + ".js"));
-                }
-            }
+            //    foreach (var methodGroupModel in serviceClientTemplateModel.MethodGroupModels)
+            //    {
+            //        var methodGroupTemplate = new MethodGroupTemplate
+            //        {
+            //            Model = methodGroupModel
+            //        };
+            //        await Write(methodGroupTemplate, Path.Combine("operations", methodGroupModel.MethodGroupType.ToCamelCase() + ".js"));
+            //    }
+            //}
         }
     }
 }
