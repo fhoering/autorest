@@ -317,7 +317,7 @@ namespace AutoRest.CSharp
 
         private IType NormalizeCompositeType(CompositeType compositeType)
         {
-            compositeType.Name = GetTypeName(compositeType.Name);
+            compositeType.Name = compositeType.Name.Split('.').Last();
 
             foreach (var property in compositeType.Properties)
             {
@@ -353,7 +353,7 @@ namespace AutoRest.CSharp
             sequenceType.ElementType = NormalizeTypeReference(sequenceType.ElementType);
             if (sequenceType.ElementType.IsValueType())
             {
-                sequenceType.NameFormat = "System.Collections.Generic.IList<{0}?>";
+                sequenceType.NameFormat = "System.Collections.Generic.IList<{0}>";
             }
             else
             {
@@ -367,7 +367,7 @@ namespace AutoRest.CSharp
             dictionaryType.ValueType = NormalizeTypeReference(dictionaryType.ValueType);
             if (dictionaryType.ValueType.IsValueType())
             {
-                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<string, {0}?>";
+                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<string, {0}>";
             }
             else
             {

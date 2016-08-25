@@ -90,10 +90,10 @@ namespace AutoRest.CSharp.TemplateModels
                     format, parameter.DeclarationExpression, parameter.Name, defaultValue));
             }
 
-            if (addCustomHeaderParameters)
-            {
-                declarations.Add("System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null");
-            }
+            //if (addCustomHeaderParameters)
+            //{
+            //    declarations.Add("System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null");
+            //}
 
             return string.Join(", ", declarations);
         }
@@ -107,11 +107,11 @@ namespace AutoRest.CSharp.TemplateModels
         {
             var declarations = this.GetSyncMethodParameterDeclaration(addCustomHeaderParameters);
 
-            if (!string.IsNullOrEmpty(declarations))
-            {
-                declarations += ", ";
-            }            
-            declarations += "System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)";
+            //if (!string.IsNullOrEmpty(declarations))
+            //{
+            //    declarations += ", ";
+            //}
+            //declarations += "System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)";
 
             return declarations;
         }
@@ -163,25 +163,29 @@ namespace AutoRest.CSharp.TemplateModels
         {
             get
             {
-                if (ReturnType.Body != null && ReturnType.Headers != null)
-                {
-                    return string.Format(CultureInfo.InvariantCulture,
-                            "Microsoft.Rest.HttpOperationResponse<{0},{1}>", ReturnType.Body.Name, ReturnType.Headers.Name);
-                }
-                else if (ReturnType.Body != null)
-                {
-                    return string.Format(CultureInfo.InvariantCulture,
-                        "Microsoft.Rest.HttpOperationResponse<{0}>", ReturnType.Body.Name);
-                }
-                else if (ReturnType.Headers != null)
-                {
-                    return string.Format(CultureInfo.InvariantCulture,
-                        "Microsoft.Rest.HttpOperationHeaderResponse<{0}>", ReturnType.Headers.Name);
-                }
-                else
-                {
-                    return "Microsoft.Rest.HttpOperationResponse";
-                }
+                if (ReturnType.Body == null)
+                    return "Task";
+
+                return "Task<" + ReturnType.Body.Name + ">";
+                //if (ReturnType.Body != null && ReturnType.Headers != null)
+                //{
+                //    return string.Format(CultureInfo.InvariantCulture,
+                //            "Microsoft.Rest.HttpOperationResponse<{0},{1}>", ReturnType.Body.Name, ReturnType.Headers.Name);
+                //}
+                //else if (ReturnType.Body != null)
+                //{
+                //    return string.Format(CultureInfo.InvariantCulture,
+                //        "Microsoft.Rest.HttpOperationResponse<{0}>", ReturnType.Body.Name);
+                //}
+                //else if (ReturnType.Headers != null)
+                //{
+                //    return string.Format(CultureInfo.InvariantCulture,
+                //        "Microsoft.Rest.HttpOperationHeaderResponse<{0}>", ReturnType.Headers.Name);
+                //}
+                //else
+                //{
+                //    return "Microsoft.Rest.HttpOperationResponse";
+                //}
             }
         }
 
@@ -195,16 +199,16 @@ namespace AutoRest.CSharp.TemplateModels
                 if (ReturnType.Body != null)
                 {
                     return string.Format(CultureInfo.InvariantCulture,
-                        "System.Threading.Tasks.Task<{0}>", ReturnType.Body.Name);
+                        "Task<{0}>", ReturnType.Body.Name);
                 }
                 else if(ReturnType.Headers != null)
                 {
                     return string.Format(CultureInfo.InvariantCulture,
-                        "System.Threading.Tasks.Task<{0}>", ReturnType.Headers.Name);
+                        "Task<{0}>", ReturnType.Headers.Name);
                 }
                 else
                 {
-                    return "System.Threading.Tasks.Task";
+                    return "Task";
                 }
             }
         }
@@ -309,7 +313,7 @@ namespace AutoRest.CSharp.TemplateModels
         {
             get
             {
-                return this.Body != null ? new ParameterTemplateModel(this.Body) : null;                
+                return this.Body != null ? new ParameterTemplateModel(this.Body) : null;
             }
         }
 
@@ -420,7 +424,7 @@ namespace AutoRest.CSharp.TemplateModels
                     variableName,
                     urlPathName,
                     pathParameter.Type.ToString(ClientReference, pathParameter.Name));
-                }  
+                }
             }
             if (this.LogicalParameterTemplateModels.Any(p => p.Location == ParameterLocation.Query))
             {
@@ -511,7 +515,7 @@ namespace AutoRest.CSharp.TemplateModels
                     builder.AppendLine("if ({0})", nullCheck)
                        .AppendLine("{").Indent();
                 }
-                
+
                 if (transformation.ParameterMappings.Any(m => !string.IsNullOrEmpty(m.OutputParameterProperty)) &&
                     compositeOutputParameter != null && !transformation.OutputParameter.IsRequired)
                 {
