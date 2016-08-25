@@ -182,8 +182,7 @@ namespace AutoRest.Swagger
                 method.Parameters.Add(parameter);
 
                 StringBuilder parameterName = new StringBuilder(parameter.Name);
-                parameterName = CollectionFormatBuilder.OnBuildMethodParameter(method, swaggerParameter,
-                    parameterName);
+                parameterName = CollectionFormatBuilder.OnBuildMethodParameter(method, parameter, swaggerParameter, parameterName);
 
                 if (swaggerParameter.In == ParameterLocation.Header)
                 {

@@ -15,6 +15,7 @@ namespace AutoRest.Swagger
     public static class CollectionFormatBuilder
     {
         public static StringBuilder OnBuildMethodParameter(Method method,
+            Parameter parameter,
             SwaggerParameter currentSwaggerParam,
             StringBuilder paramNameBuilder)
         {
@@ -28,7 +29,7 @@ namespace AutoRest.Swagger
             if (currentSwaggerParam.Type == DataType.Array && !hasCollectionFormat)
             {
                 // If the parameter type is array default the collectionFormat to csv
-                currentSwaggerParam.CollectionFormat = CollectionFormat.Csv;
+                parameter.CollectionFormat = CollectionFormat.Csv;
             }
 
             if (hasCollectionFormat)
@@ -38,7 +39,7 @@ namespace AutoRest.Swagger
                 {
                     if (method == null || method.Url == null)
                     {
-                       throw new ArgumentNullException("method"); 
+                       throw new ArgumentNullException("method");
                     }
 
                     method.Url = method.Url.Replace(
@@ -90,9 +91,9 @@ namespace AutoRest.Swagger
                     break;
 
                 default:
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, 
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture,
                         Resources.InvalidCollectionFormat,
-                        swaggerParameter.CollectionFormat, 
+                        swaggerParameter.CollectionFormat,
                         swaggerParameter.Name));
             }
         }
