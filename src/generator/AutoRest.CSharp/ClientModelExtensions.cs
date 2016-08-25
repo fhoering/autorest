@@ -254,31 +254,26 @@ namespace AutoRest.CSharp
             {
                 return reference;
             }
-            string serializationSettings = string.Format(CultureInfo.InvariantCulture, "{0}.SerializationSettings", clientReference);
             if (primaryType != null)
             {
                 if (primaryType.Type == KnownPrimaryType.Date)
                 {
-                    serializationSettings = "new Microsoft.Rest.Serialization.DateJsonConverter()";
+                    return reference + ".ToString(\"yyyy'-'MM'-'dd'\", CultureInfo.InvariantCulture)";
                 }
-                else if (primaryType.Type == KnownPrimaryType.DateTimeRfc1123)
+                else if (primaryType.Type == KnownPrimaryType.DateTime)
                 {
-                    serializationSettings = "new Microsoft.Rest.Serialization.DateTimeRfc1123JsonConverter()";
+                    return reference + ".ToString(\"yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK\", CultureInfo.InvariantCulture)";
                 }
                 else if (primaryType.Type == KnownPrimaryType.Base64Url)
                 {
-                    serializationSettings = "new Microsoft.Rest.Serialization.Base64UrlJsonConverter()";
+                    return reference + ".ToString(CultureInfo.InvariantCulture)";
                 }
                 else if (primaryType.Type == KnownPrimaryType.UnixTime)
                 {
-                    serializationSettings = "new Microsoft.Rest.Serialization.UnixTimeJsonConverter()";
+                    return reference + ".ToString(CultureInfo.InvariantCulture)";
                 }
             }
-
-            return string.Format(CultureInfo.InvariantCulture,
-                    "Microsoft.Rest.Serialization.SafeJsonConvert.SerializeObject({0}, {1}).Trim('\"')",
-                    reference,
-                    serializationSettings);
+            return reference + ".ToString(CultureInfo.InvariantCulture)";
         }
 
         public static bool CanBeNull(this IParameter parameter)
