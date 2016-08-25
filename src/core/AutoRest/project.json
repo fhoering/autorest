@@ -25,8 +25,8 @@
   
   "buildOptions": {
     "emitEntryPoint": true,
-    "delaySign": true,
-    "publicSign": false,
+    "delaySign": false,
+    "publicSign": true,
     "keyFile": "../../../Tools/MSSharedLibKey.snk",
     "copyToOutput": {
       "include": ["AutoRest.json"]
