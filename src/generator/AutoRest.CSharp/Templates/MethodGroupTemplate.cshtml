@@ -4,27 +4,39 @@
 @EmptyLine
 namespace @Settings.Namespace
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Criteo.Platform.Shared;
-    using System.Globalization;
-    using Microsoft.Practices.Unity;
-
+    using Microsoft.Rest;
 @foreach (var usingString in Model.Usings) {
     @:using @usingString;
 }
 @EmptyLine
-    public class @(Model.MethodGroupType) : I@(Model.MethodGroupType)
+    /// <summary>
+    /// @(Model.MethodGroupType) operations.
+    /// </summary>
+    public partial class @(Model.MethodGroupType) : Microsoft.Rest.IServiceOperations<@(Model.Name)>, I@(Model.MethodGroupType)
     {
-        private IHttpClient _client;
-	    private IServiceUriBuilder _uriBuilder;
-
-        public @(Model.MethodGroupType)(IHttpClient client, [Dependency("@(Model.MethodGroupType)")] IServiceUriBuilder uriBuilder)
-	    {
-	      _client = client;
-		  _uriBuilder = uriBuilder;
+        /// <summary>
+        /// Initializes a new instance of the @(Model.MethodGroupType) class.
+        /// </summary>
+        /// <param name='client'>
+        /// Reference to the service client.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public @(Model.MethodGroupType)(@(Model.Name) client)
+        {
+            if (client == null) 
+            {
+                throw new System.ArgumentNullException("client");
+            }
+            this.Client = client;
         }
-
+        @EmptyLine
+        /// <summary>
+        /// Gets a reference to the @(Model.Name)
+        /// </summary>
+        public @(Model.Name) Client { get; private set; }
+        @EmptyLine
         @foreach (var method in Model.MethodTemplateModels)
         {
         @:@(Include(new MethodTemplate(), method))
