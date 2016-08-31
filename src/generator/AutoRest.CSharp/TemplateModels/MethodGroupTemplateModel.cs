@@ -14,19 +14,12 @@ namespace AutoRest.CSharp.TemplateModels
         {
             this.LoadFrom(serviceClient);
             MethodTemplateModels = new List<MethodTemplateModel>();
-            // MethodGroup name and type are always the same but can be
+            // MethodGroup name and type are always the same but can be 
             // changed in derived classes
             MethodGroupName = methodGroupName;
-            MethodGroupType = methodGroupName + "Client";
+            MethodGroupType = methodGroupName;
             Methods.Where(m => m.Group == MethodGroupName)
-                .ForEach(m =>
-                {
-                    if (!m.Extensions.ContainsKey("x-ignore"))
-                    {
-                        MethodTemplateModels.Add(new MethodTemplateModel(m, serviceClient,
-                            SyncMethodsGenerationMode.None));
-                    }
-                });
+                .ForEach(m => MethodTemplateModels.Add(new MethodTemplateModel(m, serviceClient, SyncMethodsGenerationMode.None)));
         }
 
         public List<MethodTemplateModel> MethodTemplateModels { get; private set; }

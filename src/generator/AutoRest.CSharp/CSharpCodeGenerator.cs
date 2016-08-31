@@ -106,28 +106,28 @@ namespace AutoRest.CSharp
         public override async Task Generate(ServiceClient serviceClient)
         {
             // Service client
-            //var serviceClientTemplate = new ServiceClientTemplate
-            //{
-            //    Model = new ServiceClientTemplateModel(serviceClient, InternalConstructors),
-            //};
-            //await Write(serviceClientTemplate, serviceClient.Name + ".cs");
+            var serviceClientTemplate = new ServiceClientTemplate
+            {
+                Model = new ServiceClientTemplateModel(serviceClient, InternalConstructors),
+            };
+            await Write(serviceClientTemplate, serviceClient.Name + ".cs");
 
             // Service client extensions
-            //if (serviceClient.Methods.Any(m => m.Group == null))
-            //{
-            //    var extensionsTemplate = new ExtensionsTemplate
-            //    {
-            //        Model = new ExtensionsTemplateModel(serviceClient, null, SyncMethods),
-            //    };
-            //    await Write(extensionsTemplate, serviceClient.Name + "Extensions.cs");
-            //}
+            if (serviceClient.Methods.Any(m => m.Group == null))
+            {
+                var extensionsTemplate = new ExtensionsTemplate
+                {
+                    Model = new ExtensionsTemplateModel(serviceClient, null, SyncMethods),
+                };
+                await Write(extensionsTemplate, serviceClient.Name + "Extensions.cs");
+            }
 
             // Service client interface
-            //var serviceClientInterfaceTemplate = new ServiceClientInterfaceTemplate
-            //{
-            //    Model = new ServiceClientTemplateModel(serviceClient, InternalConstructors),
-            //};
-            //await Write(serviceClientInterfaceTemplate, "I" + serviceClient.Name + ".cs");
+            var serviceClientInterfaceTemplate = new ServiceClientInterfaceTemplate
+            {
+                Model = new ServiceClientTemplateModel(serviceClient, InternalConstructors),
+            };
+            await Write(serviceClientInterfaceTemplate, "I" + serviceClient.Name + ".cs");
 
             // Operations
             foreach (var group in serviceClient.MethodGroups)
@@ -135,54 +135,54 @@ namespace AutoRest.CSharp
                 // Operation
                 var operationsTemplate = new MethodGroupTemplate
                 {
-                    Model = new MethodGroupTemplateModel(serviceClient, group)
+                    Model = new MethodGroupTemplateModel(serviceClient, group),
                 };
                 await Write(operationsTemplate, operationsTemplate.Model.MethodGroupType + ".cs");
 
                 // Service client extensions
-                //var operationExtensionsTemplate = new ExtensionsTemplate
-                //{
-                //    Model = new ExtensionsTemplateModel(serviceClient, group, SyncMethods),
-                //};
-                //await Write(operationExtensionsTemplate, group + "Extensions.cs");
+                var operationExtensionsTemplate = new ExtensionsTemplate
+                {
+                    Model = new ExtensionsTemplateModel(serviceClient, group, SyncMethods),
+                };
+                await Write(operationExtensionsTemplate, group + "Extensions.cs");
 
                 // Operation interface
                 var operationsInterfaceTemplate = new MethodGroupInterfaceTemplate
                 {
-                    Model = new MethodGroupTemplateModel(serviceClient, group)
+                    Model = new MethodGroupTemplateModel(serviceClient, group),
                 };
                 await Write(operationsInterfaceTemplate, "I" + operationsInterfaceTemplate.Model.MethodGroupType + ".cs");
             }
 
             // Models
-            //foreach (var model in serviceClient.ModelTypes.Concat(serviceClient.HeaderTypes))
-            //{
-            //    var modelTemplate = new ModelTemplate
-            //    {
-            //        Model = new ModelTemplateModel(model),
-            //    };
-            //    await Write(modelTemplate, Path.Combine(Settings.ModelsName, model.Name + ".cs"));
-            //}
+            foreach (var model in serviceClient.ModelTypes.Concat(serviceClient.HeaderTypes))
+            {
+                var modelTemplate = new ModelTemplate
+                {
+                    Model = new ModelTemplateModel(model),
+                };
+                await Write(modelTemplate, Path.Combine(Settings.ModelsName, model.Name + ".cs"));
+            }
 
             // Enums
-            //foreach (var enumType in serviceClient.EnumTypes)
-            //{
-            //    var enumTemplate = new EnumTemplate
-            //    {
-            //        Model = new EnumTemplateModel(enumType),
-            //    };
-            //    await Write(enumTemplate, Path.Combine(Settings.ModelsName, enumTemplate.Model.TypeDefinitionName + ".cs"));
-            //}
+            foreach (var enumType in serviceClient.EnumTypes)
+            {
+                var enumTemplate = new EnumTemplate
+                {
+                    Model = new EnumTemplateModel(enumType),
+                };
+                await Write(enumTemplate, Path.Combine(Settings.ModelsName, enumTemplate.Model.TypeDefinitionName + ".cs"));
+            }
 
             // Exception
-            //foreach (var exceptionType in serviceClient.ErrorTypes)
-            //{
-            //    var exceptionTemplate = new ExceptionTemplate
-            //    {
-            //        Model = new ModelTemplateModel(exceptionType),
-            //    };
-            //    await Write(exceptionTemplate, Path.Combine(Settings.ModelsName, exceptionTemplate.Model.ExceptionTypeDefinitionName + ".cs"));
-            //}
+            foreach (var exceptionType in serviceClient.ErrorTypes)
+            {
+                var exceptionTemplate = new ExceptionTemplate
+                {
+                    Model = new ModelTemplateModel(exceptionType),
+                };
+                await Write(exceptionTemplate, Path.Combine(Settings.ModelsName, exceptionTemplate.Model.ExceptionTypeDefinitionName + ".cs"));
+            }
         }
     }
 }
