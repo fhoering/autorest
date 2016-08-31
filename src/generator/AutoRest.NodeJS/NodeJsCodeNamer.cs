@@ -152,8 +152,8 @@ namespace AutoRest.NodeJS
                     }
                 }
             }
-            //Normalize properties with dots by surrounding them with single quotes to represent
-            //them as a single property and not as one being part of another. For example: 'odata.nextLink'
+            //Normalize properties with dots by surrounding them with single quotes to represent 
+            //them as a single property and not as one being part of another. For example: 'odata.nextLink' 
             foreach (var modelType in client.ModelTypes)
             {
                 foreach (var property in modelType.Properties)
@@ -320,7 +320,7 @@ namespace AutoRest.NodeJS
 
         private IType NormalizeCompositeType(CompositeType compositeType)
         {
-            compositeType.Name = compositeType.Name.Split('.').Last();
+            compositeType.Name = GetTypeName(compositeType.Name);
 
             foreach (var property in compositeType.Properties)
             {
@@ -396,7 +396,7 @@ namespace AutoRest.NodeJS
             }
             else if (primaryType.Type == KnownPrimaryType.TimeSpan)
             {
-                primaryType.Name = "moment.duration";
+                primaryType.Name = "moment.duration"; 
             }
             else if (primaryType.Type == KnownPrimaryType.Uuid)
             {
