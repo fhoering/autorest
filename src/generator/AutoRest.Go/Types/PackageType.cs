@@ -40,6 +40,8 @@ namespace AutoRest.Go
             }
         }
 
+        public Dictionary<string, object> Extensions { get; set; }
+
         public string Package
         {
             get

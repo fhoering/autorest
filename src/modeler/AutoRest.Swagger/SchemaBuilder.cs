@@ -46,7 +46,10 @@ namespace AutoRest.Swagger
             var primaryType = _schema.GetSimplePrimaryType();
             if (primaryType != KnownPrimaryType.None)
             {
-                return new PrimaryType(primaryType);
+                return new PrimaryType(primaryType)
+                {
+                    Extensions = _schema.Extensions
+                };
             }
 
             // Otherwise create new object type
@@ -62,13 +65,14 @@ namespace AutoRest.Swagger
             // Put this in already generated types serializationProperty
             Modeler.GeneratedTypes[serviceTypeName] = objectType;
 
-            if (_schema.Type == DataType.Object && _schema.AdditionalProperties != null)
+            if (_schema.AdditionalProperties != null)
             {
                 // this schema is defining 'additionalProperties' which expects to create an extra
                 // property that will catch all the unbound properties during deserialization.
                 var name = "additionalProperties";
                 var propertyType = new DictionaryType
                 {
+                    KeyType = GetDictionaryKeyType(serviceTypeName + "Key"),
                     ValueType = _schema.AdditionalProperties.GetBuilder(Modeler).BuildServiceType(
                                _schema.AdditionalProperties.Reference != null
                                ? _schema.AdditionalProperties.Reference.StripDefinitionPath()

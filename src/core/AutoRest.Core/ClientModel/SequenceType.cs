@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace AutoRest.Core.ClientModel
@@ -29,6 +30,8 @@ namespace AutoRest.Core.ClientModel
         /// Gets the type name
         /// </summary>
         public string Name { get { return string.Format(CultureInfo.InvariantCulture, NameFormat, ElementType.Name); } }
+
+        public Dictionary<string, object> Extensions { get; set; }
 
         /// <summary>
         /// Returns a string representation of the SequenceType object.

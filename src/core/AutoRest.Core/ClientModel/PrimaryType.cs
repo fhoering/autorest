@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+
 namespace AutoRest.Core.ClientModel
 {
     /// <summary>
@@ -31,6 +33,8 @@ namespace AutoRest.Core.ClientModel
         /// Gets or sets the model type name.
         /// </summary>
         public string Name { get; set; }
+
+        public Dictionary<string, object> Extensions { get; set; }
 
         /// <summary>
         /// Gets or sets the model type format.

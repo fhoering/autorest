@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace AutoRest.Core.ClientModel
@@ -14,6 +15,8 @@ namespace AutoRest.Core.ClientModel
         {
             NameFormat = "IDictionary<string, {0}>";
         }
+
+        public IType KeyType { get; set; }
 
         /// <summary>
         /// Gets or sets the value type of the dictionary type.
@@ -34,7 +37,23 @@ namespace AutoRest.Core.ClientModel
         /// <summary>
         /// Gets the type name
         /// </summary>
-        public string Name { get { return string.Format(CultureInfo.InvariantCulture, NameFormat, ValueType.Name); } }
+        public string Name
+        {
+            get
+            {
+                if (KeyType != null && NameFormat.Contains("{1}"))
+                {
+                    return string.Format(CultureInfo.InvariantCulture, NameFormat, ValueType.Name, KeyType.Name);
+                }
+                if (KeyType == null && NameFormat.Contains("{1}"))
+                {
+                    return string.Format(CultureInfo.InvariantCulture, NameFormat, ValueType.Name, "string");
+                }
+                return string.Format(CultureInfo.InvariantCulture, NameFormat, ValueType.Name);
+            }
+        }
+
+        public Dictionary<string, object> Extensions { get; set; }
 
         /// <summary>
         /// Returns a string representation of the DictionaryType object.
@@ -58,7 +77,7 @@ namespace AutoRest.Core.ClientModel
 
             if (dictionaryType != null)
             {
-                return dictionaryType.ValueType == ValueType;
+                return dictionaryType.ValueType == ValueType && dictionaryType.KeyType == KeyType;
             }
 
             return false;
@@ -70,7 +89,12 @@ namespace AutoRest.Core.ClientModel
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return ValueType.GetHashCode();
+            var hashCode = ValueType.GetHashCode();
+            if (KeyType != null)
+            {
+                hashCode &= KeyType.GetHashCode();
+            }
+            return hashCode;
         }
 
     }

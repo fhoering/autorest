@@ -9,7 +9,9 @@ using System.Linq;
 using AutoRest.Core;
 using AutoRest.Core.ClientModel;
 using AutoRest.Core.Utilities;
+using AutoRest.Swagger.JsonConverters;
 using AutoRest.Swagger.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace AutoRest.Swagger
@@ -44,16 +46,24 @@ namespace AutoRest.Swagger
         public virtual IType BuildServiceType(string serviceTypeName)
         {
             PrimaryType type = SwaggerObject.ToType();
+            type.Extensions = SwaggerObject.Extensions;
+
             Debug.Assert(type != null);
 
             if (type.Type == KnownPrimaryType.Object && "file".Equals(SwaggerObject.Format, StringComparison.OrdinalIgnoreCase))
             {
-                type = new PrimaryType(KnownPrimaryType.Stream);
+                type = new PrimaryType(KnownPrimaryType.Stream)
+                {
+                    Extensions = SwaggerObject.Extensions
+                };
             }
             type.Format = SwaggerObject.Format;
             if (SwaggerObject.Enum != null && type.Type == KnownPrimaryType.String && !(IsSwaggerObjectConstant(SwaggerObject)))
             {
-                var enumType = new EnumType();
+                var enumType = new EnumType
+                {
+                    Extensions = SwaggerObject.Extensions
+                };
                 SwaggerObject.Enum.ForEach(v => enumType.Values.Add(new EnumValue { Name = v, SerializedName = v }));
                 if (SwaggerObject.Extensions.ContainsKey(CodeGenerator.EnumObject))
                 {
@@ -129,6 +139,7 @@ namespace AutoRest.Swagger
                     SwaggerObject.Items.GetBuilder(Modeler).BuildServiceType(itemServiceTypeName);
                 return new SequenceType
                 {
+                    Extensions = SwaggerObject.Extensions,
                     ElementType = elementType
                 };
             }
@@ -143,8 +154,11 @@ namespace AutoRest.Swagger
                 {
                     dictionaryValueServiceTypeName = serviceTypeName + "Value";
                 }
+
                 return new DictionaryType
                 {
+                    KeyType = GetDictionaryKeyType(serviceTypeName + "Key"),
+                    Extensions = SwaggerObject.Extensions,
                     ValueType =
                         SwaggerObject.AdditionalProperties.GetBuilder(Modeler)
                             .BuildServiceType((dictionaryValueServiceTypeName))
@@ -152,6 +166,25 @@ namespace AutoRest.Swagger
             }
 
             return type;
+        }
+
+        public IType GetDictionaryKeyType(string serviceTypeName)
+        {
+            IType keyType = null;
+            object xDictKey;
+            if (SwaggerObject.Extensions != null && SwaggerObject.Extensions.TryGetValue("x-dict-key", out xDictKey))
+            {
+                var settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.None,
+                    MetadataPropertyHandling = MetadataPropertyHandling.Ignore
+                };
+                settings.Converters.Add(new SchemaRequiredItemConverter());
+                var obj = JsonConvert.DeserializeObject<Schema>(xDictKey.ToString(), settings);
+
+                keyType = obj.GetBuilder(Modeler).BuildServiceType(serviceTypeName + "Key");
+            }
+            return keyType;
         }
 
         public static void PopulateParameter(IParameter parameter, SwaggerObject swaggerObject)

@@ -367,11 +367,11 @@ namespace AutoRest.CSharp
             dictionaryType.ValueType = NormalizeTypeReference(dictionaryType.ValueType);
             if (dictionaryType.ValueType.IsValueType())
             {
-                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<string, {0}?>";
+                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<{1}, {0}?>";
             }
             else
             {
-                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<string, {0}>";
+                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<{1}, {0}>";
             }
             return dictionaryType;
         }

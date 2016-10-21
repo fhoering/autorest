@@ -19,6 +19,8 @@ namespace AutoRest.Go
             get { return "interface{}"; }
         }
 
+        public Dictionary<string, object> Extensions { get; set; }
+
         public override string ToString()
         {
             return Name;

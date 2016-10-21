@@ -34,6 +34,8 @@ namespace AutoRest.Core.ClientModel
         /// </summary>
         public string Name { get; set; }
 
+        public Dictionary<string, object> Extensions { get; set; }
+
         /// <summary>
         /// Indicates whether the set of enum values will be generated as string constants.
         /// </summary>
